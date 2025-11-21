@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -27,8 +28,10 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // ⭐ IMPORTANT: Allow login & register APIs without JWT
-        if (request.getServletPath().startsWith("/api/auth")) {
+        String path = request.getServletPath();
+
+        // ⭐ Allow ONLY login & register without JWT
+        if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,7 +47,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 String role = claims.get("role", String.class);
 
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(email, null, null);
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of(() -> role) // authorities required
+                        );
 
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -55,5 +62,3 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
-

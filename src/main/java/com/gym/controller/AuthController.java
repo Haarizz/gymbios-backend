@@ -1,6 +1,10 @@
 package com.gym.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gym.entity.User;
 import com.gym.repository.UserRepository;
 import com.gym.security.JwtUtil;
+import com.gym.service.AuthService;
 
 
 
@@ -27,6 +32,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwt;
+    
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest req) {
@@ -46,6 +54,23 @@ public class AuthController {
         userRepo.save(user);
         return "User registered";
     }
+    
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(
+            @RequestBody Map<String, String> request,
+            Authentication authentication
+    ) {
+        String email = authentication.getName(); // JWT stores email here
+
+        return authService.changePassword(
+                email,
+                request.get("oldPassword"),
+                request.get("newPassword")
+        );
+    }
+
+
+
 }
 
 class LoginRequest {
