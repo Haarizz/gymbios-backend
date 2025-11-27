@@ -1,9 +1,9 @@
 package com.gym.repository;
 
-import com.gym.entity.ClassSchedule;
+import com.gym.entity.Purchase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Integer> {
+public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 }
