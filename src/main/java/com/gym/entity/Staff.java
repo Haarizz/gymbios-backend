@@ -12,7 +12,6 @@ public class Staff {
 
     private String firstname;
     private String lastname;
-
     private String employeeId;  // EMP001...
 
     private String role;
@@ -26,7 +25,17 @@ public class Staff {
     private String email;
     private String address;
 
-    // Getters & setters
+    // --- NEW FIELDS: salary defaults and status ---
+    // These are optional but required for Set Salary and status persistence
+    private Double baseSalary;
+    private Double allowances;
+    private Double deductions;
+    private String status; // e.g. "Pending", "Paid", "On Hold"
+
+    // Constructors
+    public Staff() {}
+
+    // Getters & setters (including new fields)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -62,4 +71,17 @@ public class Staff {
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+
+    // New fields getters/setters
+    public Double getBaseSalary() { return baseSalary; }
+    public void setBaseSalary(Double baseSalary) { this.baseSalary = baseSalary; }
+
+    public Double getAllowances() { return allowances; }
+    public void setAllowances(Double allowances) { this.allowances = allowances; }
+
+    public Double getDeductions() { return deductions; }
+    public void setDeductions(Double deductions) { this.deductions = deductions; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

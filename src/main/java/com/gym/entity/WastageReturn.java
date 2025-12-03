@@ -10,17 +10,31 @@ public class WastageReturn {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ✅ FIX: Added the voucherNumber field
+    private String voucherNumber; 
+    
+    // --- Core Fields ---
     private String voucherType;   // WASTAGE or RETURN
     private String date;          // dd-MM-yyyy
     private String reason;
     private String location;
-    private String products;      // JSON string (ex: [{"p":"Product A","q":5}])
+    // Assuming products is stored as a JSON string in the DB
+    @Column(columnDefinition = "TEXT") 
+    private String products;      
     private String notes;
-    private String status;        // Pending, Completed, etc.
+    private String status;        // Draft, Pending, Approved, etc.
     private Double totalValue;
+    private String partyType;     // Supplier, Customer, Other (for RETURN)
 
+    public WastageReturn() {}
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    // ✅ FIX: Getter and Setter for the new manual field
+    public String getVoucherNumber() { return voucherNumber; }
+    public void setVoucherNumber(String voucherNumber) { this.voucherNumber = voucherNumber; }
 
     public String getVoucherType() { return voucherType; }
     public void setVoucherType(String voucherType) { this.voucherType = voucherType; }
@@ -45,4 +59,7 @@ public class WastageReturn {
 
     public Double getTotalValue() { return totalValue; }
     public void setTotalValue(Double totalValue) { this.totalValue = totalValue; }
+    
+    public String getPartyType() { return partyType; }
+    public void setPartyType(String partyType) { this.partyType = partyType; }
 }

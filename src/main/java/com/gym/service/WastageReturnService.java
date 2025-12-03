@@ -2,16 +2,17 @@ package com.gym.service;
 
 import com.gym.entity.WastageReturn;
 import com.gym.repository.WastageReturnRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class WastageReturnService {
 
-    @Autowired
-    private WastageReturnRepository repo;
+    private final WastageReturnRepository repo;
+
+    public WastageReturnService(WastageReturnRepository repo) {
+        this.repo = repo;
+    }
 
     public List<WastageReturn> getAll() {
         return repo.findAll();

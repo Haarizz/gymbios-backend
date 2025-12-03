@@ -1,9 +1,9 @@
 package com.gym.repository;
 
-import com.gym.entity.WastageReturn;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.gym.entity.JobOpening;
+
 @Repository
-public interface WastageReturnRepository extends JpaRepository<WastageReturn, Long> {
-}
+public interface JobOpeningRepository extends JpaRepository<JobOpening, Long> {}
