@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        // ⭐ Allow ONLY login & register without JWT
+        // ⭐ Allow login & register without JWT
         if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
             filterChain.doFilter(request, response);
             return;
@@ -38,24 +38,37 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
+        String token = null;
+
+        // ⭐ Extract token and remove "Bearer "
         if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
+            token = header.substring(7);
+        }
 
-            if (jwtUtil.validateToken(token)) {
-                Claims claims = jwtUtil.getClaims(token);
-                String email = claims.getSubject();
-                String role = claims.get("role", String.class);
+        // ⭐ Token exists → validate
+        if (token != null) {
+            try {
+                if (jwtUtil.validateToken(token)) {
 
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                List.of(() -> role) // authorities required
-                        );
+                    Claims claims = jwtUtil.getClaims(token);
+                    String email = claims.getSubject();
+                    String role = claims.get("role", String.class);
 
-                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    List.of(() -> role)
+                            );
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    // ⭐ Set authentication in SecurityContext
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            } catch (Exception ex) {
+                // ❗ Token invalid → just proceed and let security block it
+                System.out.println("Invalid JWT: " + ex.getMessage());
             }
         }
 

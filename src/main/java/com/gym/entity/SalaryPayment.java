@@ -22,7 +22,11 @@ public class SalaryPayment {
     private Double amount;
     private String status;
     private String remarks;
-
+    private Double BankAmount;
+    private Double CashAmount;
+    private String PaymentMode;
+    private String PaymentDate;
+    
     public SalaryPayment() {}
 
     // Getters & Setters
@@ -58,4 +62,40 @@ public class SalaryPayment {
 
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
+
+
+
+	public Double getBankAmount() {
+		return BankAmount;
+	}
+
+	public void setBankAmount(Double bankAmount) {
+		BankAmount = bankAmount;
+	}
+
+	public Double getCashAmount() {
+		return CashAmount;
+	}
+
+	public void setCashAmount(Double cashAmount) {
+		CashAmount = cashAmount;
+	}
+
+	public String getPaymentMode() {
+		return PaymentMode;
+	}
+
+	public void setPaymentMode(String paymentMode) {
+		PaymentMode = paymentMode;
+	}
+
+	public String getPaymentDate() {
+		return PaymentDate;
+	}
+
+	public void setPaymentDate(String paymentDate) {
+		PaymentDate = paymentDate;
+	}
+
+
 }

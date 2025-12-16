@@ -2,6 +2,9 @@ package com.gym.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "job_openings")
@@ -26,8 +29,20 @@ public class JobOpening {
 
     private String status; // active, closed
     private LocalDate createdAt;
+    
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+    @JsonIgnore   // ✅ PREVENTS INFINITE JSON LOOP
+    private List<Candidate> candidates;
+    
 	public Long getId() {
 		return id;
+	}
+	public List<Candidate> getCandidates() {
+		return candidates;
+	}
+	public void setCandidates(List<Candidate> candidates) {
+		this.candidates = candidates;
 	}
 	public void setId(Long id) {
 		this.id = id;

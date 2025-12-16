@@ -9,6 +9,8 @@ import com.gym.entity.Candidate;
 
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
+
+    // ✅ THIS USES JobOpening.id INTERNALLY
     List<Candidate> findByJobId(Long jobId);
 }
 

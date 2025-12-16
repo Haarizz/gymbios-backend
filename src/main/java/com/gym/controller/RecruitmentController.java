@@ -20,61 +20,69 @@ import com.gym.service.RecruitmentService;
 
 @RestController
 @RequestMapping("/recruitment")
-
 public class RecruitmentController {
 
     @Autowired
     private RecruitmentService service;
-    
+
     @Autowired
     private CandidateRepository candidateRepo;
 
     @Autowired
     private InterviewRepository interviewRepo;
 
-    // JOB OPENINGS
+    // ✅ CREATE JOB
     @PostMapping("/jobs")
     public JobOpening createJob(@RequestBody JobOpening job) {
         return service.createJob(job);
     }
 
+    // ✅ GET ALL JOBS
     @GetMapping("/jobs")
     public List<JobOpening> getJobs() {
         return service.getAllJobs();
     }
 
+    // ✅ GET JOB BY ID
     @GetMapping("/jobs/{id}")
     public JobOpening getJob(@PathVariable Long id) {
         return service.getJob(id);
     }
 
-    // CANDIDATES
-    @PostMapping("/candidates")
-    public Candidate createCandidate(@RequestBody Candidate c) {
-        return service.createCandidate(c);
+    // ✅ APPLY FOR JOB (ADD CANDIDATE)
+    @PostMapping("/candidates/{jobId}")
+    public Candidate applyForJob(
+            @PathVariable Long jobId,
+            @RequestBody Candidate candidate
+    ) {
+        return service.addCandidate(candidate, jobId);
     }
 
+    // ✅ FETCH CANDIDATES BY JOB
     @GetMapping("/candidates/{jobId}")
     public List<Candidate> getCandidates(@PathVariable Long jobId) {
-        return service.getCandidates(jobId);
+        return service.getCandidatesByJob(jobId);
     }
 
-    // INTERVIEWS
+    // ✅ FETCH CANDIDATE BY ID
+    @GetMapping("/candidate/{id}")
+    public Candidate getCandidate(@PathVariable Long id) {
+        return candidateRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+    }
+
+    // ✅ SCHEDULE INTERVIEW
     @PostMapping("/interviews")
     public Interview scheduleInterview(@RequestBody Interview i) {
         return service.scheduleInterview(i);
     }
-    
+
+    // ✅ FETCH INTERVIEWS (BY JOB OR ALL)
     @GetMapping("/interviews")
-    public List<Interview> getInterviews(@RequestParam(required=false) Long jobId) {
+    public List<Interview> getInterviews(@RequestParam(required = false) Long jobId) {
         if (jobId != null) return interviewRepo.findByJobId(jobId);
         return interviewRepo.findAll();
     }
-
-    @GetMapping("/candidate/{id}")
-    public Candidate getCandidate(@PathVariable Long id) {
-        return candidateRepo.findById(id).orElseThrow(() -> new RuntimeException("Candidate not found"));
-    }
-
 }
+
 

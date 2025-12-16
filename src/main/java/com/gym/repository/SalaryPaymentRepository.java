@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface SalaryPaymentRepository extends JpaRepository<SalaryPayment, Long> {
     List<SalaryPayment> findByStaffId(Long staffId);
+
+	List<SalaryPayment> findTop20ByOrderByIdDesc();
+
+	
 }

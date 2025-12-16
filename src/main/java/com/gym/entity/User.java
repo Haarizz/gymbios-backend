@@ -19,6 +19,19 @@ public class User {
 
     @Column(nullable = false)
     private String role; // ADMIN or STAFF
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile profile;
+
+    
+
+	public UserProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(UserProfile profile) {
+		this.profile = profile;
+	}
 
 	public Long getId() {
 		return id;

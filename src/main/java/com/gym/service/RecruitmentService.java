@@ -25,34 +25,49 @@ public class RecruitmentService {
     @Autowired
     private InterviewRepository interviewRepo;
 
-    // 1. Create Job Opening
+    // ✅ CREATE JOB
     public JobOpening createJob(JobOpening job) {
         job.setCreatedAt(LocalDate.now());
         job.setStatus("active");
         return jobRepo.save(job);
     }
 
-    public List<JobOpening> getAllJobs() {
-        return jobRepo.findAll();
-    }
-
+    // ✅ GET JOB BY ID
     public JobOpening getJob(Long id) {
-        return jobRepo.findById(id).orElseThrow();
+        return jobRepo.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
     }
 
-    // 2. Candidate applies
+    // ⚠️ (NOT USED BY FRONTEND, BUT KEPT SAFE)
     public Candidate createCandidate(Candidate c) {
         c.setAppliedAt(LocalDate.now());
         c.setStage("applied");
         return candidateRepo.save(c);
     }
 
-    public List<Candidate> getCandidates(Long jobId) {
+    // ✅ APPLY FOR JOB (USED BY FRONTEND)
+    public Candidate addCandidate(Candidate candidate, Long jobId) {
+        JobOpening job = jobRepo.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        candidate.setJob(job);
+        candidate.setStage("applied");
+        candidate.setAppliedAt(LocalDate.now()); //✅✅✅ FIXED
+
+        return candidateRepo.save(candidate);
+    }
+
+    // ✅ FETCH CANDIDATES BY JOB
+    public List<Candidate> getCandidatesByJob(Long jobId) {
         return candidateRepo.findByJobId(jobId);
     }
 
-    // 3. Schedule interview
+    // ✅ FETCH ALL JOBS
+    public List<JobOpening> getAllJobs() {
+        return jobRepo.findAll();
+    }
+
+    // ✅ SCHEDULE INTERVIEW
     public Interview scheduleInterview(Interview i) {
-        return interviewRepo.save(i);
+        return interviewRepo.save(i); //✅ SAFE
     }
 }

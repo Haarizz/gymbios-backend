@@ -12,7 +12,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/payroll")
-@CrossOrigin
 public class PayrollController {
 
     @Autowired

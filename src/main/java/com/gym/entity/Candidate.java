@@ -11,7 +11,6 @@ public class Candidate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long jobId;
     private String name;
     private String email;
     private String phone;
@@ -19,8 +18,20 @@ public class Candidate {
     private String skills;
 
     private String stage; // applied, shortlisted, interviewed, offered, hired
+    @ManyToOne
+    @JoinColumn(name = "job_id")   // ✅ VERY IMPORTANT
+    private JobOpening job;
 
-    private LocalDate appliedAt;
+
+    public JobOpening getJob() {
+		return job;
+	}
+
+	public void setJob(JobOpening job) {
+		this.job = job;
+	}
+
+	private LocalDate appliedAt;
 
 	public Long getId() {
 		return id;
@@ -28,14 +39,6 @@ public class Candidate {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getJobId() {
-		return jobId;
-	}
-
-	public void setJobId(Long jobId) {
-		this.jobId = jobId;
 	}
 
 	public String getName() {
